@@ -31,7 +31,9 @@ const UserScheme = mongoose.Schema({
   ],
   email: {
     type: String,
-  }
+  },
+  courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course", unique: true }],
+  completed: [{ type: mongoose.Schema.Types.ObjectId, ref: "Completed", unique: true }]
 });
 
 const User = (module.exports = mongoose.model("User", UserScheme));
@@ -61,55 +63,55 @@ module.exports.comparePassword = async (userPassword, dbPassword, callback) => {
   });
 };
 
-module.exports.addOwnTest = (test, user, callback) => {
-  User.getUserByLogin(user.login, async (err, u) => {
-    console.log(u);
-    if (err) return callback(err, false);
-    const tests = [...u.ownTests, test];
-    console.log(tests);
-    await User.updateOne(
-      { login: u.login },
-      { $set: { ownTests: tests } },
-      callback
-    );
-    console.log(u);
-  });
-};
+// module.exports.addOwnTest = (test, user, callback) => {
+//   User.getUserByLogin(user.login, async (err, u) => {
+//     console.log(u);
+//     if (err) return callback(err, false);
+//     const tests = [...u.ownTests, test];
+//     console.log(tests);
+//     await User.updateOne(
+//       { login: u.login },
+//       { $set: { ownTests: tests } },
+//       callback
+//     );
+//     console.log(u);
+//   });
+// };
 
-module.exports.getAllOwnTests = (user, callback) => {
-  User.getUserByLogin(user.login, (err, u) => {
-    if (err) return callback(err, null);
-    callback(null, u.ownTests);
-  });
-};
+// module.exports.getAllOwnTests = (user, callback) => {
+//   User.getUserByLogin(user.login, (err, u) => {
+//     if (err) return callback(err, null);
+//     callback(null, u.ownTests);
+//   });
+// };
 
-module.exports.getOwnTest = (title, user, callback) => {
-  User.getUserByLogin(user.login, (err, u) => {
-    if (err) throw err;
-    const test = u.ownTests.find((test) => test.title === title);
-    callback(null, test);
-  });
-};
+// module.exports.getOwnTest = (title, user, callback) => {
+//   User.getUserByLogin(user.login, (err, u) => {
+//     if (err) throw err;
+//     const test = u.ownTests.find((test) => test.title === title);
+//     callback(null, test);
+//   });
+// };
 
-module.exports.getUserTests = (user) => {
-  let output = [];
-  user.ownBook.forEach((title) => {
-    const foundTest = user.ownTests.find((test) => test.title === title);
-    if (foundTest) {
-      output.push(foundTest);
-    }
-  });
-  return output;
-};
+// module.exports.getUserTests = (user) => {
+//   let output = [];
+//   user.ownBook.forEach((title) => {
+//     const foundTest = user.ownTests.find((test) => test.title === title);
+//     if (foundTest) {
+//       output.push(foundTest);
+//     }
+//   });
+//   return output;
+// };
 
-module.exports.deleteFromUserBook = (user, title, callback) => {
-  const newOwnBook = user.ownBook.filter((t) => t !== title);
-  User.updateOne(
-    { login: user.login },
-    { $set: { ownBook: newOwnBook } },
-    callback
-  );
-};
+// module.exports.deleteFromUserBook = (user, title, callback) => {
+//   const newOwnBook = user.ownBook.filter((t) => t !== title);
+//   User.updateOne(
+//     { login: user.login },
+//     { $set: { ownBook: newOwnBook } },
+//     callback
+//   );
+// };
 
 module.exports.deleteFromBook = (user, title, callback) => {
   const updatedBook = user.book.filter((t) => t !== title);
