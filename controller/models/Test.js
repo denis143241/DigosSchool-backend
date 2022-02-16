@@ -9,7 +9,7 @@ const TestScheme = mongoose.Schema({
     type: String,
     required: true,
   },
-  creator: {
+  master: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
