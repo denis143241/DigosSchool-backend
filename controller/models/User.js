@@ -14,7 +14,7 @@ const UserScheme = mongoose.Schema({
     type: String,
     required: true,
   },
-  name: {
+  username: {
     type: String,
     required: true,
   },
@@ -22,28 +22,16 @@ const UserScheme = mongoose.Schema({
     type: String,
     required: true,
   },
-  book: {
-    type: Array,
-    required: false,
-    unique: true
-  },
-  ownBook: {
-    type: Array,
-    required: false,
-    unique: true
-  },
-  ownTests: [
-    {
-      type: Object,
-      ref: "Test",
-    },
-  ],
+  book: [{ type: mongoose.Schema.Types.ObjectId, ref: "Test", unique: true }],
   roles: [
     {
       type: String,
       ref: "Role",
     },
   ],
+  email: {
+    type: String,
+  }
 });
 
 const User = (module.exports = mongoose.model("User", UserScheme));
@@ -90,10 +78,10 @@ module.exports.addOwnTest = (test, user, callback) => {
 
 module.exports.getAllOwnTests = (user, callback) => {
   User.getUserByLogin(user.login, (err, u) => {
-    if (err) return callback(err, null)
-    callback(null, u.ownTests)
-  })
-}
+    if (err) return callback(err, null);
+    callback(null, u.ownTests);
+  });
+};
 
 module.exports.getOwnTest = (title, user, callback) => {
   User.getUserByLogin(user.login, (err, u) => {
@@ -104,22 +92,30 @@ module.exports.getOwnTest = (title, user, callback) => {
 };
 
 module.exports.getUserTests = (user) => {
-  let output = []
-  user.ownBook.forEach(title => {
-    const foundTest = user.ownTests.find(test => test.title === title)
+  let output = [];
+  user.ownBook.forEach((title) => {
+    const foundTest = user.ownTests.find((test) => test.title === title);
     if (foundTest) {
-      output.push(foundTest)
+      output.push(foundTest);
     }
-  })
-  return output
-}
+  });
+  return output;
+};
 
 module.exports.deleteFromUserBook = (user, title, callback) => {
-  const newOwnBook = user.ownBook.filter(t => t !== title)
-  User.updateOne({login: user.login}, {$set: {ownBook: newOwnBook}}, callback)
-}
+  const newOwnBook = user.ownBook.filter((t) => t !== title);
+  User.updateOne(
+    { login: user.login },
+    { $set: { ownBook: newOwnBook } },
+    callback
+  );
+};
 
 module.exports.deleteFromBook = (user, title, callback) => {
-  const updatedBook = user.book.filter(t => t !== title)
-  User.updateOne({login: user.login}, {$set: {book: updatedBook}}, callback)
-}
+  const updatedBook = user.book.filter((t) => t !== title);
+  User.updateOne(
+    { login: user.login },
+    { $set: { book: updatedBook } },
+    callback
+  );
+};
