@@ -1,0 +1,35 @@
+{
+  "name": "learninglanguagesapp",
+  "version": "1.0.0",
+  "description": "MVC app on 'MEVN' (V - VueJS)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "*",
+    "express": "*",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.14.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "*",
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "keywords": [
+    "MEVN",
+    "MEAN",
+    "languages",
+    "school",
+    "VueJS",
+    "Express",
+    "NodeJS",
+    "MongoDB"
+  ],
+  "author": "Denis Igoshin",
+  "license": "ISC"
+}
