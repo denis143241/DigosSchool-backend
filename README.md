@@ -1,4 +1,4 @@
-adding on root durectory folder 'config' and then create there file db.js
+add on root durectory folder 'config' and then create there file db.js
 
 db.js includes:
     module.exports = {
