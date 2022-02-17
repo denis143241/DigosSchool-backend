@@ -58,7 +58,6 @@ module.exports.getUserByLogin = (login, callback) => {
 module.exports.comparePassword = async (userPassword, dbPassword, callback) => {
   await bcrypt.compare(userPassword, dbPassword, (err, isMatch) => {
     if (err) throw err;
-    console.log(isMatch);
     callback(null, isMatch);
   });
 };
@@ -113,11 +112,11 @@ module.exports.comparePassword = async (userPassword, dbPassword, callback) => {
 //   );
 // };
 
-module.exports.deleteFromBook = (user, title, callback) => {
-  const updatedBook = user.book.filter((t) => t !== title);
-  User.updateOne(
-    { login: user.login },
-    { $set: { book: updatedBook } },
-    callback
-  );
-};
+// module.exports.deleteFromBook = (user, title, callback) => {
+//   const updatedBook = user.book.filter((t) => t !== title);
+//   User.updateOne(
+//     { login: user.login },
+//     { $set: { book: updatedBook } },
+//     callback
+//   );
+// };

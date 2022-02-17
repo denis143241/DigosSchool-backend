@@ -4,6 +4,7 @@ const path = require("path")
 const configDB = require("./config/db")
 const api = require("./controller/api")
 const userRouter = require("./router/userRouter")
+const testRouter = require("./router/testRouter")
 
 const app = express()
 const PORT = process.env.PORT || 8080
@@ -15,9 +16,10 @@ app.use(express.json())
 
 app.use('/api', api)
 
-// -------------------------------------------------------Тут новый API --------------------------------------------------------
+// ------------------------------------------------------- There is a new API --------------------------------------------------------
 
 app.use("/api/user", userRouter)
+app.use("/api/test", testRouter)
 
 // ------------------------------------------------------------------------------------------------------------------------------
 

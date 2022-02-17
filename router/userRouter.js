@@ -1,6 +1,8 @@
 const express = require("express")
 const authMiddleware = require("../middleware/authMiddleware")
 const { check, validationResult } = require("express-validator");
+const jwt = require("jsonwebtoken");
+const db = require("../config/db");
 const User = require("../controller/models/User")
 
 const router = express.Router();
@@ -37,5 +39,42 @@ router.post("/reg",
     });
   }
 );
+
+router.post("/auth", (req, res) => {
+  const { login, password } = req.body;
+
+  // Поиск Пользователя по логину
+  User.getUserByLogin(login, (err, user) => {
+    if (err) throw err;
+    if (!user) {
+      // Пользователь не найден
+      return res.json({
+        success: false,
+        message: "Такой пользователь был не найден",
+      });
+    }
+
+    // Пользователь найден
+    User.comparePassword(password, user.password, (err, isMatch) => {
+      if (err) throw err;
+      if (isMatch) {
+        const token = jwt.sign(user.toJSON(), db.secret, {
+          expiresIn: "24h",
+        });
+
+        res.json({
+          success: true,
+          token,
+          user: {
+            id: user._id,
+            name: user.name,
+            login: user.login,
+            language: user.language,
+          },
+        });
+      } else return res.json({ success: false, message: "Неверный пароль" });
+    });
+  });
+});
 
 module.exports = router
