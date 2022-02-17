@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const path = require("path")
 const configDB = require("./config/db")
 const api = require("./controller/api")
+const userRouter = require("./router/userRouter")
 
 const app = express()
 const PORT = process.env.PORT || 8080
@@ -13,6 +14,12 @@ app.use(express.static(path.join(__dirname ,"client-app/dist/")))
 app.use(express.json())
 
 app.use('/api', api)
+
+// -------------------------------------------------------Тут новый API --------------------------------------------------------
+
+app.use("/api/user", userRouter)
+
+// ------------------------------------------------------------------------------------------------------------------------------
 
 mongoose.connect(configDB.db)
 

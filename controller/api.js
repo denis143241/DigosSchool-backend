@@ -30,11 +30,6 @@ router.post("/create-admin-lesson", authMiddleware, (req, res) => {
         message: "Произошла ошибка! Проверьте введенные данные.",
       });
     }
-    // if (test != null)
-    //   return res.json({
-    //     succes: false,
-    //     message: "Тест с таким именем уже существует.",
-    //   });
 
     Test.addTest(newTest, (err, test) => {
       if (err) {
