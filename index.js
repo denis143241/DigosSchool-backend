@@ -5,6 +5,7 @@ const configDB = require("./config/db")
 const api = require("./controller/api")
 const userRouter = require("./router/userRouter")
 const testRouter = require("./router/testRouter")
+const courseRouter = require("./router/courseRouter")
 
 const app = express()
 const PORT = process.env.PORT || 8080
@@ -20,6 +21,7 @@ app.use('/api', api)
 
 app.use("/api/user", userRouter)
 app.use("/api/test", testRouter)
+app.use("/api/course", courseRouter)
 
 // ------------------------------------------------------------------------------------------------------------------------------
 
