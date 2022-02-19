@@ -24,3 +24,7 @@ const Course = (module.exports = mongoose.model("Course", CourseScheme));
 module.exports.createCourse = (newCourse, callback) => {
   newCourse.save(callback);
 };
+
+module.exports.getCourseById = (id, callback) => {
+  Course.findById(id, callback)
+}

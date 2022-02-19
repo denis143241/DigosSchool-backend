@@ -77,4 +77,19 @@ router.post("/auth", (req, res) => {
   });
 });
 
+router.get("/", authMiddleware, (req, res) => {
+  User.findById(req.user._id, async (err, u) => {
+    if (err) return res.status(400)
+    await u.populate("courses")
+    res.json(u)
+  })
+})
+
+router.post("/add-course", authMiddleware, (req, res) => {
+  User.addCourse(req.body.courseId, req.user, (err, isMatch) => {
+    if (err) return res.status(400).json({success: false, message: "Неудалось добавить курс", err})
+    res.json({success: true, message: "Курс успешно добавлен"})
+  })
+})
+
 module.exports = router

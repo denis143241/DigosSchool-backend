@@ -62,6 +62,10 @@ module.exports.comparePassword = async (userPassword, dbPassword, callback) => {
   });
 };
 
+module.exports.addCourse = (courseId, user, callback) => {
+  User.updateOne({_id: user._id}, {$set: {courses: [...user.courses, courseId]}}, callback)
+}
+
 // module.exports.addOwnTest = (test, user, callback) => {
 //   User.getUserByLogin(user.login, async (err, u) => {
 //     console.log(u);
