@@ -28,3 +28,12 @@ module.exports.createCourse = (newCourse, callback) => {
 module.exports.getCourseById = (id, callback) => {
   Course.findById(id, callback)
 }
+
+module.exports.addTest = (courseId, testId, callback) => {
+  // Тут 2 раза идет обращение к БД, в будущем это стоит переписать
+  Course.findById(courseId, (err, course) => {
+    if (err) throw err
+
+    Course.updateOne({_id: courseId}, {$set: {tests: [...course.tests, testId]}}, callback)
+  })
+}

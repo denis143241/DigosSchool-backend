@@ -24,4 +24,11 @@ router.get("/", (req, res) => {
 
 })
 
+router.post("/add-test", authMiddleware, (req, res) => {
+    Course.addTest(req.body.courseId, req.body.testId, (err, isMatch) => {
+        if (err) res.status(400).json({success: false})
+        res.json({success: true, message: "Тест успешно добавлен к курсу"})
+    })
+})
+
 module.exports = router
