@@ -7,6 +7,7 @@ const userRouter = require("./router/userRouter")
 const testRouter = require("./router/testRouter")
 const courseRouter = require("./router/courseRouter")
 const samplesRouter = require("./router/samplesRouter")
+const completeRouter = require("./router/completeRouter")
 
 const app = express()
 const PORT = process.env.PORT || 8080
@@ -24,6 +25,7 @@ app.use("/api/user", userRouter)
 app.use("/api/test", testRouter)
 app.use("/api/course", courseRouter)
 app.use("/api/samples", samplesRouter)
+app.use("/api/completed", completeRouter)
 
 // ------------------------------------------------------------------------------------------------------------------------------
 

@@ -21,4 +21,4 @@ const CompletedScheme = mongoose.Schema({
   },
 });
 
-const Completed = (module.exports = mongoose.model("Course", CompletedScheme));
+const Completed = (module.exports = mongoose.model("Completed", CompletedScheme));
