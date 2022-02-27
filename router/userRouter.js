@@ -87,7 +87,7 @@ router.get("/", authMiddleware, (req, res) => {
 
 router.post("/add-course", authMiddleware, (req, res) => {
   User.addCourse(req.body.courseId, req.user, (err, isMatch) => {
-    if (err) return res.status(400).json({success: false, message: "Неудалось добавить курс", err})
+    if (err) return res.status(400).json({success: isMatch, message: "Неудалось добавить курс", err})
     res.json({success: true, message: "Курс успешно добавлен"})
   })
 })

@@ -63,9 +63,15 @@ module.exports.comparePassword = async (userPassword, dbPassword, callback) => {
 };
 
 module.exports.addCourse = (courseId, user, callback) => {
-  User.updateOne({_id: user._id}, {$set: {courses: [...user.courses, courseId]}}, callback)
+  User.updateOne({_id: user._id}, {$push: {courses: courseId}}, callback)
 }
 
-module.exports.getUserByCourse_many = (courseId) => {
-  // Выборка из БД всех пользователей которые имеют доступ к courseId
+/**
+ * Возвращает список пользователей у которых есть доступ к определенному курсу
+ * 
+ * @param {import("mongoose").ObjectId} courseId - id курса
+ */
+module.exports.getUserByCourse_many = async (courseId) => {
+  const users = await User.find({courses: courseId}, {_id: 1, username: 1, email: 1})
+  return users
 }
