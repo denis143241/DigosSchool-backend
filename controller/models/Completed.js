@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("../models/User")
 
 const CompletedScheme = mongoose.Schema({
   master: {
@@ -22,3 +23,13 @@ const CompletedScheme = mongoose.Schema({
 });
 
 const Completed = (module.exports = mongoose.model("Completed", CompletedScheme));
+
+/**
+ * Возвращает список завершенных тестов, по конкретному пользователю
+ * 
+ * @param {import("mongoose").ObjectId} userId
+ * @param {Function} callback
+ */
+module.exports.getByUser = (userId, callback) => {
+  Completed.find({master: userId}, callback)
+}
