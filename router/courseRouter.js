@@ -37,22 +37,29 @@ router.post("/add-test", authMiddleware, (req, res) => {
  * @param {import("mongoose").ObjectId} courseId 
  */
 router.get("/liderboard", authMiddleware, async (req, res) => {
-    /*
-    Зная ID участника обойти все завершенные тесты и взять оттуда ТЕ, которые с нужным UserID и включает в себя тест из курса.
-    Забираем Score и повторяем действие пока не найдем все завершенные по Одному Юзеру
-    Повторяем действие пока не пройдем всех участников курса.
-
-    Итог Таблца -> Юзернейм | Балл -> По убыванию 
-    [
-        {
-            user: Some,
-            totalScore: Any
-        }
-    ]
-    */
     Course.liderboard(req.body.courseId, (answer) => {
         // Сортировка по возрастанию
         answer = answer.sort((a, b) => b.totalScore - a.totalScore);
+        res.json({result: answer})
+    })
+})
+
+/**
+ * Возвращает JSON таблицу всех пройденных тестов участниками курса
+ * (Только для создателя курса)
+ * 
+ * @param {import("mongoose").ObjectId} courseId
+ */
+router.get("/passing-info", authMiddleware, (req, res) => {
+    Course.getPassingCourseInfo(req.body.courseId, req.user._id, (answer) => {
+        if (answer === null) {
+            return res.json({success: false, message: "Вы не являетесь владельцем этого курса!"})
+        }
+
+        // for (let i = 0; i < answer.length; i++) {
+        //     let elem = answer[i]
+        //     elem.populate("test")
+        // }
         res.json({result: answer})
     })
 })

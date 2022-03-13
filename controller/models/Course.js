@@ -79,3 +79,36 @@ function remainSuccessfulyAttemp(arr) {
   })
   return Object.entries(dict)
 }
+
+/**
+ * Выдает подробную информацию о пройденных тестах в определенном курсе 
+ * Только для преподавателя курса.
+ * 
+ * @param {import("mongoose").ObjectId} courseId ID курса.
+ * @param {import("mongoose").ObjectId} userId ID пользователя.
+ * @param {Function} callback callback.
+ * 
+ * @returns {Array} [{user: {_id, username, email} completes: [{test: {_id, title}, Score: Number}]}]
+ */
+module.exports.getPassingCourseInfo = async (courseId, userId, callback) => {
+  const output = []
+
+  await Course.findById(courseId, async (err, c) => {
+    if (err) throw err
+
+    if (userId.toString() !== c.creator.toString()) {
+      console.log(c.creator)
+      return callback(null)
+    }
+
+    const users = await User.getUserByCourse_many(courseId)
+
+    for (let i = 0; i < users.length; i++) {
+      let u = users[i]
+      let userCompletes = await Completed.find({$and: [{master: u._id}, {test: {$in: c.tests}}]}, {_id: 0, Score: 1, test: 1}).populate("test", "title")
+      
+      output.push({user: u, completes: [...userCompletes]})
+    }
+    callback(output)
+  })
+}
