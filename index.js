@@ -2,7 +2,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 const path = require("path")
 const configDB = require("./config/db")
-const api = require("./controller/api")
+// const api = require("./controller/api")
 const userRouter = require("./router/userRouter")
 const testRouter = require("./router/testRouter")
 const courseRouter = require("./router/courseRouter")
@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname ,"client-app/dist/")))
 
 app.use(express.json())
 
-app.use('/api', api)
+// app.use('/api', api)
 
 // ------------------------------------------------------- There is a new API --------------------------------------------------------
 
