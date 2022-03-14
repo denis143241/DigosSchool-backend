@@ -7,6 +7,14 @@ const User = require("../controller/models/User")
 
 const router = express.Router();
 
+/**
+ * Регистрация пользователя
+ * 
+ * @param {String} login
+ * @param {String} password
+ * @param {String} username
+ * @param {String} language
+ */
 router.post("/reg",
   // middleware
   [
@@ -40,6 +48,12 @@ router.post("/reg",
   }
 );
 
+/**
+ * @param {String} login
+ * @param {String} password
+ * 
+ * @returns {Object} {success, message?, token, user: {id, username, language}}
+ */
 router.post("/auth", (req, res) => {
   const { login, password } = req.body;
 
@@ -67,8 +81,7 @@ router.post("/auth", (req, res) => {
           token,
           user: {
             id: user._id,
-            name: user.name,
-            login: user.login,
+            username: user.username,
             language: user.language,
           },
         });
@@ -78,7 +91,7 @@ router.post("/auth", (req, res) => {
 });
 
 router.get("/", authMiddleware, (req, res) => {
-  User.findById(req.user._id, async (err, u) => {
+  User.findById(req.user._id, {password: 0, login: 0}, async (err, u) => {
     if (err) return res.status(400)
     await u.populate("courses")
     res.json(u)
@@ -90,6 +103,10 @@ router.post("/add-course", authMiddleware, (req, res) => {
     if (err) return res.status(400).json({success: isMatch, message: "Неудалось добавить курс", err})
     res.json({success: true, message: "Курс успешно добавлен"})
   })
+})
+
+router.get("/roles", authMiddleware, (req, res) => {
+  res.json({roles: req.user.roles})
 })
 
 module.exports = router

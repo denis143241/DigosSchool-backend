@@ -39,6 +39,16 @@ module.exports.addTest = async (newTest, callback) => {
   await newTest.save(callback);
 };
 
+/**
+ * Возвращает из базы найденные тесты с соответствующей категорией
+ * 
+ * @param {String} category
+ * @param {Function} callback
+ */
+module.exports.getTestsByCategory_admin = (category, callback) => {
+  Test.find({$and: [{category: category}, {isGeneral: true}]}, callback)
+}
+
 // module.exports.TITLE_SALT = "usertests";
 // module.exports.TITLE_SEPARATOR = "_";
 

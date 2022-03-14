@@ -17,6 +17,15 @@ router.post("/create", authMiddleware, (req, res) => {
         res.json({success: true, message: "Тест успешно добавлен"})
     })
 });
-  
+
+router.get("/category/:category", (req, res) => {
+    Test.getTestsByCategory_admin(req.params.category, (err, tests) => {
+        if (err) {
+            return res.status(403).json({success: false, message: "Произошла не предвиденная ошибка при поиске тестов"})
+        }
+
+        return res.json(tests);
+    })
+})
 
 module.exports = router;
