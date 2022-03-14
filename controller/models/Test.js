@@ -49,6 +49,27 @@ module.exports.getTestsByCategory_admin = (category, callback) => {
   Test.find({$and: [{category: category}, {isGeneral: true}]}, callback)
 }
 
+/**
+ * Возвращает тест найденный среди общих или null
+ * 
+ * @param {String} testId 
+ * @param {Function} callback 
+ */
+module.exports.getFromGeneral = (testId, callback) => {
+  Test.find({$and: [{_id: testId}, {isGeneral: true}]}, callback)
+}
+
+/**
+ * Возвращает тест либо из общей базы либо личный тест пользователя
+ * 
+ * @param {String} testId 
+ * @param {String} userId 
+ * @param {Function} callback 
+ */
+module.exports.getFromGeneral_and_Own = (testId, userId, callback) => {
+  Test.find({$or: [{$and: [{_id: testId}, {isGeneral: true}]}, {$and: [{_id: testId}, {master: userId}]}]}, callback)
+}
+
 // module.exports.TITLE_SALT = "usertests";
 // module.exports.TITLE_SEPARATOR = "_";
 

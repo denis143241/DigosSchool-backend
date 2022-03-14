@@ -1,5 +1,6 @@
 const express = require("express")
 const authMiddleware = require("../middleware/authMiddleware")
+const authMiddleware_light = require("../middleware/authMiddleware_light")
 const Test = require("../controller/models/Test")
 
 const router = express.Router();
@@ -26,6 +27,25 @@ router.get("/category/:category", (req, res) => {
 
         return res.json(tests);
     })
+})
+
+router.get("/:id", authMiddleware_light, (req, res) => {
+    if (req.user === null) {
+        Test.getFromGeneral(req.params.id, (err, test) => {
+            if (err) {
+                return res.status(403).json({success: false, message: "Произошла ошибка при поиске вашего теста"})
+            }
+            return res.json(...test)
+        })
+    }
+    else {
+        Test.getFromGeneral_and_Own(req.params.id, req.user._id, (err, test) => {
+            if (err) {
+                return res.status(403).json({success: false, message: "Произошла ошибка при поиске вашего теста"})
+            }
+            return res.json(...test)
+        })
+    }
 })
 
 module.exports = router;
