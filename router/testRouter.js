@@ -12,7 +12,11 @@ router.post("/create", authMiddleware, (req, res) => {
     }
 
     // Adding test to DB
-    const newTest = new Test({...req.body})
+    const newTest = new Test({...req.body, master: req.user._id})
+    // Проверка на заполненное поле Words
+    if (Object.entries(newTest.words).length === 0) {
+        return res.json({success: false, message: "Тест должен сожержать хотябы 1 слово!"})
+    }
     Test.addTest(newTest, (err, test) => {
         if (err) return res.status(400).json({success: false, message: "Ошибка при добавлении теста в БД", err})
         res.json({success: true, message: "Тест успешно добавлен"})
