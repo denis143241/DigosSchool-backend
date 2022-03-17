@@ -109,4 +109,37 @@ router.get("/roles", authMiddleware, (req, res) => {
   res.json({roles: req.user.roles})
 })
 
+router.get("/book", authMiddleware, (req, res) => {
+  User.getBook(req.user._id, async (err, book) => {
+    if (err) {
+      return res.status(403).json({success: false, message: "Произошла непредвиденная ошибка с нашей стороны, приносим свои извинения :("})
+    }
+    await book.populate("book")
+    return res.json(book)
+  })
+})
+
+router.post("/add-to-book", authMiddleware, (req, res) => {
+  User.addToBook(req.user._id, req.body.testId, (err, isMatch) => {
+    if (err) {
+      return res.status(403).json({success: false, message: "Произошла непредвиденная ошибка с нашей стороны, приносим свои извинения :("})
+    }
+    return res.json({success: true, message: "Тест был успешно добавлен в вашу книгу"})
+  })
+})
+
+router.get("/book/:id", authMiddleware, (req, res) => {
+  User.getBook(req.user._id, async (err, result) => {
+    if (err) {
+      return res.status(403).json({success: false, message: "Произошла непредвиденная ошибка с нашей стороны, приносим свои извинения :("})
+    }
+    await result.populate("book")
+    test = result.book.find(obj => obj._id == req.params.id)
+    if (!test) {
+      return res.json(false)
+    }
+    res.json(test)
+  })
+})
+
 module.exports = router

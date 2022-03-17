@@ -75,3 +75,21 @@ module.exports.getUserByCourse_many = async (courseId) => {
   const users = await User.find({courses: courseId}, {_id: 1, username: 1, email: 1})
   return users
 }
+
+/**
+ * @param {String} userId 
+ * @param {Function} callback 
+ */
+module.exports.getBook = (userId, callback) => {
+  User.findById(userId, {book: 1, _id: 0}, callback)
+}
+
+/**
+ * Добавляет тест в книгу коннкретного пользователя
+ * @param {String} userId User' ID
+ * @param {String} testId Test' ID
+ * @param {Function} callback
+ */
+module.exports.addToBook = (userId, testId, callback) => {
+  User.updateOne({_id: userId}, {$push: {book: testId}}, callback)
+}
