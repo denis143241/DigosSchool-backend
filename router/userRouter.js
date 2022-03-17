@@ -142,4 +142,14 @@ router.get("/book/:id", authMiddleware, (req, res) => {
   })
 })
 
+router.post("/book/delete/:id", authMiddleware, (req, res) => {
+  User.deleteFromBook(req.user._id, req.params.id, (err, isMatch) => {
+    if (err) {
+      return res.status(403).json({success: false, message: "Произошла непредвиденная ошибка с нашей стороны, тест не был удален. Пожалуйста обновите страницу"})
+    }
+    console.log(isMatch);
+    return res.json({success: true, message: "Ваш тест был успешно удален"})
+  })
+})
+
 module.exports = router

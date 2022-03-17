@@ -93,3 +93,13 @@ module.exports.getBook = (userId, callback) => {
 module.exports.addToBook = (userId, testId, callback) => {
   User.updateOne({_id: userId}, {$push: {book: testId}}, callback)
 }
+
+/**
+ * 
+ * @param {String} userId 
+ * @param {String} testId 
+ * @param {Function} callback
+ */
+module.exports.deleteFromBook = (userId, testId, callback) => {
+  User.updateOne({_id: userId}, {$pull: {book: testId}}, callback)
+}
