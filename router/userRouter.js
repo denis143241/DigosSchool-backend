@@ -119,8 +119,8 @@ router.get("/book", authMiddleware, (req, res) => {
   })
 })
 
-router.post("/add-to-book", authMiddleware, (req, res) => {
-  User.addToBook(req.user._id, req.body.testId, (err, isMatch) => {
+router.post("/book/add/:id", authMiddleware, (req, res) => {
+  User.addToBook(req.user._id, req.params.id, (err, isMatch) => {
     if (err) {
       return res.status(403).json({success: false, message: "Произошла непредвиденная ошибка с нашей стороны, приносим свои извинения :("})
     }
@@ -147,7 +147,7 @@ router.post("/book/delete/:id", authMiddleware, (req, res) => {
     if (err) {
       return res.status(403).json({success: false, message: "Произошла непредвиденная ошибка с нашей стороны, тест не был удален. Пожалуйста обновите страницу"})
     }
-    console.log(isMatch);
+
     return res.json({success: true, message: "Ваш тест был успешно удален"})
   })
 })
