@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Test = require("../models/Test")
 const bcrypt = require("bcryptjs");
 const res = require("express/lib/response");
 
@@ -102,4 +103,8 @@ module.exports.addToBook = (userId, testId, callback) => {
  */
 module.exports.deleteFromBook = (userId, testId, callback) => {
   User.updateOne({_id: userId}, {$pull: {book: testId}}, callback)
+}
+
+module.exports.getOwnTests = (userId, callback) => {
+  Test.find({master: userId}, callback)
 }

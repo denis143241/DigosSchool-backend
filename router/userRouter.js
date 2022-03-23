@@ -152,4 +152,13 @@ router.post("/book/delete/:id", authMiddleware, (req, res) => {
   })
 })
 
+router.get("/tests", authMiddleware, (req, res) => {
+  User.getOwnTests(req.user._id, (err, tests) => {
+    if (err) {
+      return res.status(403).json({success: false, message: "Что-то пошло не так при поиске ваших тестов. Пожалуйста попробуйте снова."})
+    }
+    return res.json(tests)
+  })
+})
+
 module.exports = router
