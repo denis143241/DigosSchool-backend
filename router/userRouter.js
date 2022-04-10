@@ -98,6 +98,17 @@ router.get("/", authMiddleware, (req, res) => {
   })
 })
 
+router.get("/courses", authMiddleware, (req, res) => {
+  User.findById(req.user._id, {courses: 1, _id: 0}, async (err, result) => {
+    if (err) return res.status(400)
+    await result.populate("courses")
+    for (let c of result.courses) {
+      await c.populate("creator", {username: 1, _id: 0})
+    }
+    res.json(result)
+  })
+})
+
 router.post("/add-course", authMiddleware, (req, res) => {
   User.addCourse(req.body.courseId, req.user, (err, isMatch) => {
     if (err) return res.status(400).json({success: isMatch, message: "Неудалось добавить курс", err})
