@@ -105,7 +105,7 @@ router.get("/courses", authMiddleware, (req, res) => {
     for (let c of result.courses) {
       await c.populate("creator", {username: 1, _id: 0})
     }
-    res.json(result)
+    res.json([...result.courses])
   })
 })
 
