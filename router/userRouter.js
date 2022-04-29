@@ -98,6 +98,16 @@ router.get("/", authMiddleware, (req, res) => {
   })
 })
 
+router.get("/uesrs-by-username/:row/:amount", (req, res) => {
+  User.getUsersByUsername(req.params.row, req.params.amount, (err, result) => {
+    if (err) {
+      res.status(403).json({success: false, message: "Произошла ошибка при поиске пользователей."})
+    }
+
+    res.json(result)
+  })
+})
+
 router.get("/courses", authMiddleware, (req, res) => {
   User.findById(req.user._id, {courses: 1, _id: 0}, async (err, result) => {
     if (err) return res.status(400)
