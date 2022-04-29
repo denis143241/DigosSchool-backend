@@ -108,3 +108,8 @@ module.exports.deleteFromBook = (userId, testId, callback) => {
 module.exports.getOwnTests = (userId, callback) => {
   Test.find({master: userId}, callback)
 }
+
+module.exports.getUsersByUsername = (searchRow, amount, callback) => {
+  const regex = new RegExp(searchRow, 'i')
+  User.find({username: {$regex: regex}}, {username: 1, email: 1}).limit(amount).exec(callback)
+}

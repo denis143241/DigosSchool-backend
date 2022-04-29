@@ -89,12 +89,22 @@ router.post("/auth", (req, res) => {
     });
   });
 });
-
+'somesomesome'
 router.get("/", authMiddleware, (req, res) => {
   User.findById(req.user._id, {password: 0, login: 0}, async (err, u) => {
     if (err) return res.status(400)
     await u.populate("courses")
     res.json(u)
+  })
+})
+
+router.get("/uesrs-by-username/:row/:amount", (req, res) => {
+  User.getUsersByUsername(req.params.row, req.params.amount, (err, result) => {
+    if (err) {
+      res.status(403).json({success: false, message: "Произошла ошибка при поиске пользователей."})
+    }
+
+    res.json(result)
   })
 })
 
